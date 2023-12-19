@@ -8,6 +8,7 @@ const props = defineProps({
   product: Object,
 });
 
+console.log(props);
 // emits
 defineEmits(["addToCart"])
 

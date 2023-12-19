@@ -6,7 +6,7 @@ import { useCartStore } from "../stores/CartStore";
 import { storeToRefs } from "pinia";
 
 const { totalSum, products } = storeToRefs(useCartStore());
-const { removeItem } = useCartStore();
+const { removeItem, updateItem } = useCartStore();
 
 // data
 const active = ref(false);
@@ -25,7 +25,7 @@ const active = ref(false);
           <!-- <CartItem :product="{ name: 'Dried Pineapple', price: 5 }" :count="5" @updateCount="" @clear="" />
           <CartItem :product="{ name: 'Pineapple Gum', price: 3 }" :count="5" @updateCount="" @clear="" /> -->
           <CartItem v-for="product in products" :key="product.name" :product="product" :count="product.count"
-            @clear="removeItem(product)" @updateCount="">
+            @clear="removeItem(product)" @updateCount="updateItem(product, count)">
           </CartItem>
         </ul>
         <div class="flex justify-end text-2xl mb-5">

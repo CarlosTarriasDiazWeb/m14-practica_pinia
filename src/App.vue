@@ -8,8 +8,11 @@ import { useCartStore } from "./stores/CartStore";
 import { storeToRefs } from "pinia";
 
 //Només podem deestructurar les refs i els computed
+//Fem el storeToRefs per no perdre la referència a les variables reactives del store.
+const productsStore = useProductStore();
 const { products } = storeToRefs(useProductStore());
 
+productsStore.fill();
 const { addCart } = useCartStore();
 
 const add = (event, product) => {

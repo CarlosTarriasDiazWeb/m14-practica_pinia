@@ -24,6 +24,13 @@ export const useCartStore = defineStore('cart', {
                 this.products[indexOfProduct].count += newProduct.count;
             }
         },
+        updateItem(item, newCount) {
+            const indexOfProduct = this.products.findIndex((product) => product.name === item.name);
+            if (indexOfProduct === -1) { //Si no existeix l'afegim al carro.
+                this.products[indexOfProduct].count = newCount;
+            }
+
+        },
         removeItem(item) {
             this.products = this.products.filter(product => product.name !== item.name);
         }
