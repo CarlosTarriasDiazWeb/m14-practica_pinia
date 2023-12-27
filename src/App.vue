@@ -16,7 +16,8 @@ productsStore.fill();
 const { addCart } = useCartStore();
 
 const add = (event, product) => {
-  console.log(event);
+  //Mostra el valor del comptador.
+  //console.log(event);
   const newProduct = { name: product.name, count: event, price: product.price };
   addCart(newProduct);
 }

@@ -5,8 +5,14 @@ export const useCartStore = defineStore('cart', {
         products: []
     }),
     getters: {
+        size(state) {
+            return state.products.length;
+        },
         totalSum(state) {
             return state.products.reduce((acc, product) => acc + product.price * product.count, 0);
+        },
+        totalCount(state) {
+            return state.size > 0 ? state.products.reduce((acc, product) => acc + product.count, 0) : 0;
         }
     },
     actions: {
@@ -24,15 +30,17 @@ export const useCartStore = defineStore('cart', {
                 this.products[indexOfProduct].count += newProduct.count;
             }
         },
-        updateItem(item, newCount) {
-            const indexOfProduct = this.products.findIndex((product) => product.name === item.name);
-            if (indexOfProduct === -1) { //Si no existeix l'afegim al carro.
+        updateItem(newCount, itemName) {
+            const indexOfProduct = this.products.findIndex((product) => product.name === itemName);
+            if (indexOfProduct !== -1) { //Quan trobem el item actualitzem el seu comptador
                 this.products[indexOfProduct].count = newCount;
             }
-
         },
         removeItem(item) {
             this.products = this.products.filter(product => product.name !== item.name);
+        },
+        reset() {
+            this.products.length = 0;
         }
     }
 });

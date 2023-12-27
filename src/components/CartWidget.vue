@@ -5,39 +5,42 @@ import CartItem from "./CartItem.vue";
 import { useCartStore } from "../stores/CartStore";
 import { storeToRefs } from "pinia";
 
-const { totalSum, products } = storeToRefs(useCartStore());
+const { totalSum, totalCount, products } = storeToRefs(useCartStore());
 const { removeItem, updateItem } = useCartStore();
 
 // data
 const active = ref(false);
+
+// emits
+defineEmits(["clearCart"])
 </script>
 <template>
   <div class="relative">
     <!-- Icon that always shows -->
     <span class="cursor-pointer" @click="active = true">
       <fa icon="shopping-cart" size="lg" class="text-gray-700" />
-      <div class="cart-count absolute">10</div>
+      <div class="cart-count absolute">{{ totalCount }}</div>
     </span>
     <!-- Modal Overlay only shows when cart is clicked on -->
     <AppModalOverlay :active="active" @close="active = false">
-      <div>
+      <div v-if="products.length">
         <ul class="items-in-cart">
           <!-- <CartItem :product="{ name: 'Dried Pineapple', price: 5 }" :count="5" @updateCount="" @clear="" />
           <CartItem :product="{ name: 'Pineapple Gum', price: 3 }" :count="5" @updateCount="" @clear="" /> -->
           <CartItem v-for="product in products" :key="product.name" :product="product" :count="product.count"
-            @clear="removeItem(product)" @updateCount="updateItem(product, count)">
+            @clear="removeItem(product)" @updateCount="updateItem($event, product.name)">
           </CartItem>
         </ul>
         <div class="flex justify-end text-2xl mb-5">
           Total: <strong>${{ totalSum }}</strong>
         </div>
         <div class="flex justify-end">
-          <AppButton class="secondary mr-2">Clear Cart</AppButton>
+          <AppButton class="secondary mr-2" @click="$emit('clearCart')">Clear Cart</AppButton>
           <AppButton class="primary">Checkout</AppButton>
         </div>
       </div>
       <!-- Uncomment and use condition to show when cart is empty -->
-      <!-- <div><em>Cart is Empty</em></div> -->
+      <div v-else><em>Cart is Empty</em></div>
     </AppModalOverlay>
   </div>
 </template>
