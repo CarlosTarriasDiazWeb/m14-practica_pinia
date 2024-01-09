@@ -16,8 +16,20 @@ productsStore.fill();
 const { addCart } = useCartStore();
 
 const add = (event, product) => {
+
   //Mostra el valor del comptador.
-  //console.log(event);
+  //console.log(event)
+
+  //Manera antiga 1
+  // const count = parseInt(event);
+  // useCartStore.$patch(state => {
+  //   for (let index = 0; index < count; index++) {
+  //     state.products.push(product);
+  //   }
+  // })
+
+
+  //Passem un objecte que agrupi les props del producte que ens interessa i el comptador per facilitar la lògica del carro i ens evitem passar el comptador per paràmetre.
   const newProduct = { name: product.name, count: event, price: product.price };
   addCart(newProduct);
 }

@@ -5,7 +5,7 @@ import CartItem from "./CartItem.vue";
 import { useCartStore } from "../stores/CartStore";
 import { storeToRefs } from "pinia";
 
-const { totalSum, totalCount, products } = storeToRefs(useCartStore());
+const { totalSum, totalCount, isEmpty, grouped } = storeToRefs(useCartStore());
 const { removeItem, updateItem } = useCartStore();
 
 // data
@@ -23,12 +23,12 @@ defineEmits(["clearCart"])
     </span>
     <!-- Modal Overlay only shows when cart is clicked on -->
     <AppModalOverlay :active="active" @close="active = false">
-      <div v-if="products.length">
+      <div v-if="!isEmpty">
         <ul class="items-in-cart">
           <!-- <CartItem :product="{ name: 'Dried Pineapple', price: 5 }" :count="5" @updateCount="" @clear="" />
           <CartItem :product="{ name: 'Pineapple Gum', price: 3 }" :count="5" @updateCount="" @clear="" /> -->
-          <CartItem v-for="product in products" :key="product.name" :product="product" :count="product.count"
-            @clear="removeItem(product)" @updateCount="updateItem($event, product.name)">
+          <CartItem v-for="item in grouped" :key="item[0].name" :product="item[0]" :count="item[0].count"
+            @clear="removeItem(item[0])" @updateCount="updateItem($event, item[0].name)">
           </CartItem>
         </ul>
         <div class="flex justify-end text-2xl mb-5">
