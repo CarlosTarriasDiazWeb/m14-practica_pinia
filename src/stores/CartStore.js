@@ -10,6 +10,7 @@ export const useCartStore = defineStore('cart', {
             return state.products.length;
         },
         totalSum(state) {
+            //La funció reduce "canalitza" tots els items en un sol valor, hem d'indicar com va augmentant el acomulador (acc + product.price * product.count) i el seu valor inicial (0)
             return state.products.reduce((acc, product) => acc + product.price * product.count, 0);
         },
         totalCount(state) {
@@ -18,8 +19,11 @@ export const useCartStore = defineStore('cart', {
         isEmpty() {
             return this.totalCount === 0
         },
-        //Agrupem els productes pel seu nom
-        grouped: state => groupBy(state.products, product => product.name)
+        //Agrupem els productes pel seu nom.
+        grouped: state => groupBy(state.products, product => product.name),
+        //Retornem una funció per poder passar paràmetres.
+        //Com que hem afegit la propietat count al item del carro en realitat això ens ho podem estalviar.
+        groupCount: () => (name) => this.grouped[name]['count']
     },
     actions: {
         addCart(newProduct) {
@@ -49,17 +53,17 @@ export const useCartStore = defineStore('cart', {
                 this.products[indexOfProduct].count += newProduct.count;
             }
         },
-        updateItem(newCount, itemName) {
+        setItemCount(newCount, itemName) {
             const indexOfProduct = this.products.findIndex((product) => product.name === itemName);
             if (indexOfProduct !== -1) { //Quan trobem el item actualitzem el seu comptador
                 this.products[indexOfProduct].count = newCount;
             }
         },
-        removeItem(item) {
-            this.products = this.products.filter(product => product.name !== item.name);
+        removeItem(itemName) {
+            this.products = this.products.filter(product => product.name !== itemName);
         },
-        reset() {
-            this.products.length = 0;
-        }
+        // reset() {
+        //     this.products.length = 0;
+        // }
     }
 });

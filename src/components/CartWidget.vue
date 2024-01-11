@@ -5,8 +5,9 @@ import CartItem from "./CartItem.vue";
 import { useCartStore } from "../stores/CartStore";
 import { storeToRefs } from "pinia";
 
+const cartStore = useCartStore();
 const { totalSum, totalCount, isEmpty, grouped } = storeToRefs(useCartStore());
-const { removeItem, updateItem } = useCartStore();
+const { removeItem, setItemCount } = useCartStore();
 
 // data
 const active = ref(false);
@@ -27,15 +28,16 @@ defineEmits(["clearCart"])
         <ul class="items-in-cart">
           <!-- <CartItem :product="{ name: 'Dried Pineapple', price: 5 }" :count="5" @updateCount="" @clear="" />
           <CartItem :product="{ name: 'Pineapple Gum', price: 3 }" :count="5" @updateCount="" @clear="" /> -->
-          <CartItem v-for="item in grouped" :key="item[0].name" :product="item[0]" :count="item[0].count"
-            @clear="removeItem(item[0])" @updateCount="updateItem($event, item[0].name)">
+          <CartItem v-for="(item, name) in grouped" :key="name" :product="item[0]" :count="item[0].count"
+            @clear="removeItem(name)" @updateCount="setItemCount($event, name)">
           </CartItem>
+          <!-- {{ grouped }} -->
         </ul>
         <div class="flex justify-end text-2xl mb-5">
           Total: <strong>${{ totalSum }}</strong>
         </div>
         <div class="flex justify-end">
-          <AppButton class="secondary mr-2" @click="$emit('clearCart')">Clear Cart</AppButton>
+          <AppButton class="secondary mr-2" @click="cartStore.$reset()">Clear Cart</AppButton>
           <AppButton class="primary">Checkout</AppButton>
         </div>
       </div>
