@@ -1,9 +1,13 @@
-import { defineStore } from 'pinia';
-import { groupBy } from "lodash"
+import { defineStore, acceptHMRUpdate } from 'pinia';
+import { groupBy } from "lodash";
+import { useAuthUserStore } from "../stores/AuthUserStore";
+import { useLocalStorage } from "@vueuse/core";
 
 export const useCartStore = defineStore('cart', {
+    historyEnabled: true,
     state: () => ({
-        products: []
+        //products:[],
+        products: useLocalStorage("CartStore:items", []),
     }),
     getters: {
         size(state) {
@@ -39,6 +43,10 @@ export const useCartStore = defineStore('cart', {
             //Podem agrupar directament els productes si mirem si està repetit dins els items del carro.
 
             //Primer mirem si el producte existeix.
+
+            //Per forçar que al suscribir-nos es mostri l'error.
+            //throw new Error("example error");
+
             if (this.products.length === 0) {
                 //Clonem el nou objecte per evitar que es modifiquin tots els productes.
                 this.products.push({ ...newProduct });
@@ -62,8 +70,16 @@ export const useCartStore = defineStore('cart', {
         removeItem(itemName) {
             this.products = this.products.filter(product => product.name !== itemName);
         },
+        checkout() {
+            const authUserStore = useAuthUserStore();
+            alert(`${authUserStore.username} name just bought ${this.totalCount} items at a total of $${this.totalSum}`)
+        }
         // reset() {
         //     this.products.length = 0;
         // }
     }
 });
+
+if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(useCartStore, import.meta.hot));
+}

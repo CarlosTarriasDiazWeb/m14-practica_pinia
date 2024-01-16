@@ -7,7 +7,7 @@ import { storeToRefs } from "pinia";
 
 const cartStore = useCartStore();
 const { totalSum, totalCount, isEmpty, grouped } = storeToRefs(useCartStore());
-const { removeItem, setItemCount } = useCartStore();
+const { removeItem, setItemCount, checkout } = useCartStore();
 
 // data
 const active = ref(false);
@@ -38,7 +38,7 @@ defineEmits(["clearCart"])
         </div>
         <div class="flex justify-end">
           <AppButton class="secondary mr-2" @click="cartStore.$reset()">Clear Cart</AppButton>
-          <AppButton class="primary">Checkout</AppButton>
+          <AppButton class="primary" @click="checkout">Checkout</AppButton>
         </div>
       </div>
       <!-- Uncomment and use condition to show when cart is empty -->
