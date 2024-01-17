@@ -37,7 +37,7 @@ defineEmits(["clearCart"])
           Total: <strong>${{ totalSum }}</strong>
         </div>
         <div class="flex justify-end">
-          <AppButton class="secondary mr-2" @click="cartStore.$reset()">Clear Cart</AppButton>
+          <AppButton class="secondary mr-2" @click="cartStore.reset()">Clear Cart</AppButton>
           <AppButton class="primary" @click="checkout">Checkout</AppButton>
         </div>
       </div>

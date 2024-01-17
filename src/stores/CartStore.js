@@ -73,10 +73,11 @@ export const useCartStore = defineStore('cart', {
         checkout() {
             const authUserStore = useAuthUserStore();
             alert(`${authUserStore.username} name just bought ${this.totalCount} items at a total of $${this.totalSum}`)
+        },
+        reset() {
+            //Hem de forçar el reset de l'estat per a que no agafi el valor del localStorage.
+            this.products = [];
         }
-        // reset() {
-        //     this.products.length = 0;
-        // }
     }
 });
 
